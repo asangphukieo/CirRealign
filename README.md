@@ -56,16 +56,62 @@ All FASTA files must be BWA-indexed (`bwa index <ref.fasta>`).
 
 ## Installation
 
+### Option 1: Docker (recommended)
+
+All dependencies are bundled in the Docker image — no manual tool installation required.
+
+```bash
+# Pull the image
+docker pull asangphukieo/cirealign:1.2
+
+# Verify
+docker run --rm asangphukieo/cirealign:1.2
+```
+
+### Option 2: Build Docker image locally
+
+```bash
+git clone https://github.com/asangphukieo/CirRealign.git
+cd CirRealign
+docker build -t asangphukieo/cirealign:1.2 .
+```
+
+### Option 3: Manual installation
+
+Install each tool individually:
+
 ```bash
 # Clone the repository
 git clone https://github.com/asangphukieo/CirRealign.git
 cd CirRealign
 
-# Verify Nextflow is installed (requires Java 11+)
+# Requires: Nextflow (22.10.x), BWA, SAMtools, ABRA2, CircularMapper
 nextflow -version
 ```
 
 ## Usage
+
+### Run with Docker
+
+```bash
+nextflow run CirRealign.nf \
+    -profile docker \
+    --input_summary pass_samples.txt \
+    --ref_sublineage_folder /path/to/ref_sublineage/ \
+    --output_folder ./results
+```
+
+### Run with Singularity (HPC)
+
+```bash
+nextflow run CirRealign.nf \
+    -profile singularity \
+    --input_summary pass_samples.txt \
+    --ref_sublineage_folder /path/to/ref_sublineage/ \
+    --output_folder ./results
+```
+
+### Run locally (tools pre-installed)
 
 ### Basic Run
 
