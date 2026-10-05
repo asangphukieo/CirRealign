@@ -9,6 +9,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 # ── System dependencies ──────────────────────────────────────────────────────
 RUN apt-get update && apt-get install -y --no-install-recommends \
         build-essential \
+        git \
         wget \
         curl \
         ca-certificates \
@@ -42,13 +43,12 @@ RUN wget -q https://github.com/samtools/htslib/releases/download/1.19/htslib-1.1
     && make install \
     && cd .. && rm -rf htslib-1.19 htslib-1.19.tar.bz2
 
-# ── BWA 0.7.18 ───────────────────────────────────────────────────────────────
-RUN wget -q https://github.com/lh3/bwa/releases/download/v0.7.18/bwa-0.7.18.tar.bz2 \
-    && tar xjf bwa-0.7.18.tar.bz2 \
-    && cd bwa-0.7.18 \
+# ── BWA 0.7.19 ───────────────────────────────────────────────────────────────
+RUN git clone --depth 1 --branch v0.7.19 https://github.com/lh3/bwa.git \
+    && cd bwa \
     && make -j$(nproc) \
     && cp bwa /usr/local/bin/ \
-    && cd .. && rm -rf bwa-0.7.18 bwa-0.7.18.tar.bz2
+    && cd .. && rm -rf bwa
 
 # ── ABRA2 2.23 ───────────────────────────────────────────────────────────────
 RUN mkdir -p /opt/abra2 \
@@ -58,9 +58,9 @@ RUN mkdir -p /opt/abra2 \
     && chmod +x /usr/local/bin/abra2
 
 # ── CircularMapper (realignsamfile) ──────────────────────────────────────────
-RUN wget -q -O /opt/CircularMapper.jar \
-        https://github.com/apeltzer/CircularMapper/releases/download/v1.93.5/CircularMapper-1.93.5.jar \
-    && printf '#!/bin/bash\njava -jar /opt/CircularMapper.jar realign "$@"\n' > /usr/local/bin/realignsamfile \
+RUN wget -q -O /opt/realign.jar \
+        https://github.com/apeltzer/CircularMapper/releases/download/v1.93.5/realign-1.93.5.jar \
+    && printf '#!/bin/bash\njava -jar /opt/realign.jar "$@"\n' > /usr/local/bin/realignsamfile \
     && chmod +x /usr/local/bin/realignsamfile
 
 # ── Nextflow 22.10.8 (DSL1 compatible) ──────────────────────────────────────
