@@ -13,8 +13,11 @@ HPV16 has a circular genome (~7.9 kb), which creates alignment artifacts at the 
    - **Gap-containing reads** → BWA-mem (non-elongated ref) → ABRA2
 4. **Merging** both read sets into a final BAM file with accurate coordinates
 
-### Pipeline Workflow
+### Pipeline DAG
 
+![CirRealign Pipeline DAG](dag.png)
+
+**Workflow summary:**
 ```
 Input BAM ──► bwa_aln (elongated ref)
                 │
