@@ -1,0 +1,2 @@
+sample1,A1,test_data/input_bam/sample1.bam
+sample2,A2,test_data/input_bam/sample2.bam
